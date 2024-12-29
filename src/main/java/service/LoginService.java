@@ -25,6 +25,11 @@ public class LoginService {
             throw new SocialsException("User already exists");
         } else {
             String hashedPassword = Crypto.getInstance().hashPassword(password);
+
+            if (!passwordMeetsComplexity(hashedPassword)) {
+                throw new SocialsException("Password does not meet complexity requirements");
+            }
+
             Repositories.getCustomerRepository().addCustomer(login, hashedPassword);
             return Repositories.getCustomerRepository().findCustomer(login, hashedPassword);
         }
